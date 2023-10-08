@@ -1,12 +1,13 @@
 import pets from "../petsData";
 import PetItem from "./PetItem";
+import SearchBar from "./SearchBar";
+import TypeSelect from "./TypeSelect";
 import { useState } from "react";
 
 function PetsList() {
   const [query, setQuery] = useState("");
-  const searchPet = (e) => {
-    setQuery(e.target.value);
-  };
+  const [type, setType] = useState("");
+
   const filteredPet =
     query === ""
       ? pets
@@ -14,12 +15,8 @@ function PetsList() {
           pet.name.toLowerCase().includes(query.toLowerCase())
         );
 
-  const [type, setType] = useState("");
-  const searchType = (e) => {
-    setType(e.target.value);
-  };
   const typeFilter =
-    type === "" ? filteredPet : filteredPet.filter((pet) => pet.type == type);
+    type === "" ? filteredPet : filteredPet.filter((pet) => pet.type === type);
 
   const petList = typeFilter.map((pet) => <PetItem pet={pet} key={pet.id} />);
 
@@ -33,25 +30,11 @@ function PetsList() {
                 Fur-ends
               </h1>
               <div className="input-group rounded">
-                <input
-                  type="search"
-                  className="form-control rounded"
-                  placeholder="Search"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                  onChange={searchPet}
-                />
+                <SearchBar setQuery={setQuery} />
               </div>
               <br />
               Type:
-              <select onChange={searchType} className="form-select">
-                <option value="" selected>
-                  All
-                </option>
-                <option value="Cat">Cat</option>
-                <option value="Dog">Dog</option>
-                <option value="Rabbit">Rabbit</option>
-              </select>
+              <TypeSelect setType={setType} />
             </div>
           </div>
         </div>
